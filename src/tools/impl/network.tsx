@@ -248,7 +248,7 @@ function CidrCalculator() {
         </Row>
         {range && 'error' in range ? <Notice kind="error">{range.error}</Notice> : null}
         {range && 'list' in range ? (
-          <Output label={`${range.list.length} blok CIDR (paling ringkas)`} value={range.list.map((x) => x.cidr).join('\n')} rows={Math.min(10, range.list.length + 1)} />
+          <Output label={`${(range.list ?? []).length} blok CIDR (paling ringkas)`} value={(range.list ?? []).map((x) => x.cidr).join('\n')} rows={Math.min(10, (range.list ?? []).length + 1)} />
         ) : null}
       </Card>
     </div>
@@ -304,11 +304,11 @@ function SubnetCalculator() {
       {'split' in res ? (
         <>
           <StatGrid cols={3}>
-            <Stat label="Prefix baru" value={`/${res.np}`} accent />
-            <Stat label="Jumlah subnet" value={res.split.total.toLocaleString('id-ID')} />
-            <Stat label="Host per subnet" value={(2 ** (32 - res.np) - 2).toLocaleString('id-ID')} />
+            <Stat label="Prefix baru" value={`/${(res.np ?? 0)}`} accent />
+            <Stat label="Jumlah subnet" value={(res.split ?? { total: 0, rows: [] }).total.toLocaleString('id-ID')} />
+            <Stat label="Host per subnet" value={(2 ** (32 - (res.np ?? 0)) - 2).toLocaleString('id-ID')} />
           </StatGrid>
-          <p className="text-xs text-zinc-500">Netmask baru: {ipv4Info(parseIPv4(res.base.network)!, res.np).mask}</p>
+          <p className="text-xs text-zinc-500">Netmask baru: {ipv4Info(parseIPv4((res.base ?? { network: "0.0.0.0" }).network)!, (res.np ?? 0)).mask}</p>
           <div className="inset max-h-96 overflow-auto">
             <table className="w-full min-w-[34rem] border-collapse text-left font-mono text-xs">
               <thead className="sticky top-0 bg-[#0e1115] text-[11px] uppercase tracking-wider text-zinc-500">
@@ -321,10 +321,10 @@ function SubnetCalculator() {
                 </tr>
               </thead>
               <tbody>
-                {res.split.rows.map((r) => (
+                {(res.split ?? { total: 0, rows: [] }).rows.map((r) => (
                   <tr key={r.index} className="border-t border-white/[0.05] text-zinc-200">
                     <td className="px-3 py-1.5 text-zinc-500">{r.index}</td>
-                    <td className="px-3 py-1.5">{r.network}/{res.np}</td>
+                    <td className="px-3 py-1.5">{r.network}/{(res.np ?? 0)}</td>
                     <td className="px-3 py-1.5">{r.firstHost}</td>
                     <td className="px-3 py-1.5">{r.lastHost}</td>
                     <td className="px-3 py-1.5">{r.broadcast}</td>
@@ -333,12 +333,12 @@ function SubnetCalculator() {
               </tbody>
             </table>
           </div>
-          {res.split.total > res.split.rows.length ? (
-            <Notice kind="info">Menampilkan {res.split.rows.length} dari {res.split.total.toLocaleString('id-ID')} subnet.</Notice>
+          {(res.split ?? { total: 0, rows: [] }).total > (res.split ?? { total: 0, rows: [] }).rows.length ? (
+            <Notice kind="info">Menampilkan {(res.split ?? { total: 0, rows: [] }).rows.length} dari {(res.split ?? { total: 0, rows: [] }).total.toLocaleString('id-ID')} subnet.</Notice>
           ) : null}
           <CopyButton
             label="Salin daftar jaringan"
-            text={res.split.rows.map((r) => `${r.network}/${res.np}`).join('\n')}
+            text={(res.split ?? { total: 0, rows: [] }).rows.map((r) => `${r.network}/${(res.np ?? 0)}`).join('\n')}
           />
         </>
       ) : null}
@@ -553,7 +553,7 @@ function UrlParser() {
     }
   }, [raw]);
 
-  const params = useMemo(() => (res && 'u' in res ? Array.from(res.u.searchParams.entries()) : []), [res]);
+  const params = useMemo(() => (res && 'u' in res ? Array.from(res.u?.searchParams.entries() ?? []) : []), [res]);
   const safeDecode = (s: string) => {
     try {
       return decodeURIComponent(s);
@@ -571,23 +571,23 @@ function UrlParser() {
           {res.assumed ? <Notice kind="info">Tidak ada skema (http/https) — dianggap <strong>https://</strong>.</Notice> : null}
           <KeyValue
             rows={[
-              ['Skema', res.u.protocol.replace(':', '')],
-              ['Origin', res.u.origin === 'null' ? '—' : res.u.origin],
-              ['Username', res.u.username ? safeDecode(res.u.username) : '—'],
-              ['Password', res.u.password ? '••••••' : '—'],
-              ['Host', res.u.host || '—'],
-              ['Hostname', res.u.hostname || '—'],
-              ['Port', res.u.port || '(default)'],
-              ['Path', res.u.pathname],
-              ['Query string', res.u.search || '—'],
-              ['Fragment', res.u.hash || '—'],
+              ['Skema', res.u!.protocol.replace(':', '')],
+              ['Origin', res.u!.origin === 'null' ? '—' : res.u!.origin],
+              ['Username', res.u!.username ? safeDecode(res.u!.username) : '—'],
+              ['Password', res.u!.password ? '••••••' : '—'],
+              ['Host', res.u!.host || '—'],
+              ['Hostname', res.u!.hostname || '—'],
+              ['Port', res.u!.port || '(default)'],
+              ['Path', res.u!.pathname],
+              ['Query string', res.u!.search || '—'],
+              ['Fragment', res.u!.hash || '—'],
             ]}
           />
-          {res.u.pathname.split('/').filter(Boolean).length ? (
+          {res.u!.pathname.split('/').filter(Boolean).length ? (
             <div>
               <p className="label">Segmen path</p>
               <ol className="flex flex-wrap gap-1.5">
-                {res.u.pathname.split('/').filter(Boolean).map((s, i) => (
+                {res.u!.pathname.split('/').filter(Boolean).map((s, i) => (
                   <li key={i} className="badge badge-muted !normal-case !tracking-normal font-mono">{safeDecode(s)}</li>
                 ))}
               </ol>

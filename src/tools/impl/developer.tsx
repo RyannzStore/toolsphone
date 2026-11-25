@@ -558,10 +558,10 @@ function TimestampConverter() {
           <KeyValue
             rows={[
               ['Terdeteksi', parsed.isMs ? 'milidetik' : 'detik'],
-              ['Waktu lokal', fmtLocal(parsed.d)],
-              ['UTC', fmtUtc(parsed.d)],
-              ['ISO 8601', parsed.d.toISOString()],
-              ['Relatif', relative(parsed.ms)],
+              ['Waktu lokal', fmtLocal(parsed.d ?? new Date())],
+              ['UTC', fmtUtc(parsed.d ?? new Date())],
+              ['ISO 8601', (parsed.d ?? new Date()).toISOString()],
+              ['Relatif', relative(parsed.ms ?? 0)],
             ]}
           />
         ) : null}
