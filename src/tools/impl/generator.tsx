@@ -621,7 +621,7 @@ function UniversalConverter() {
 function AboutMe() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [form, setForm] = useState({ nama: 'Rannz', umur: '17', pekerjaan: 'Pelajar', lokasi: 'Banten, Indonesia', status: 'aktif', email: 'ranggagntng170@gmail.com', website: 'toolora.web.id' })
-  const [pos, setPos] = useState({ x: 290, y: 340, size: 52, gap: 72 })
+  const [pos, setPos] = useState({ x: 520, y: 380, size: 34, gap: 50 })
   const draw = useCallback(() => {
     const c = canvasRef.current; if (!c) return
     const ctx = c.getContext('2d'); if (!ctx) return
@@ -632,8 +632,10 @@ function AboutMe() {
       const sx = c.width / 1600; const sy = c.height / 1200
       ctx.font = `bold ${pos.size * sx}px monospace`
       ctx.fillStyle = '#d6ffdd'; ctx.fillText('termux ', pos.x*sx, pos.y*sy)
-      ctx.fillStyle = '#22ff66'; ctx.fillText('$', (pos.x+170)*sx, pos.y*sy)
-      ctx.fillStyle = '#d6ffdd'; ctx.fillText(' ~ /data/diri', (pos.x+210)*sx, pos.y*sy)
+      let ox = pos.x*sx + ctx.measureText('termux ').width
+      ctx.fillStyle = '#22ff66'; ctx.fillText('$', ox, pos.y*sy)
+      ox += ctx.measureText('$').width
+      ctx.fillStyle = '#d6ffdd'; ctx.fillText(' ~ /data/diri', ox, pos.y*sy)
       ctx.font = `${pos.size * sx}px monospace`
       const lines = ['', 'data_diri = {', `  "nama": "${form.nama}",`, `  "umur": ${form.umur},`, `  "pekerjaan": "${form.pekerjaan}",`, `  "lokasi": "${form.lokasi}",`, `  "status": "${form.status}",`, `  "email": "${form.email}",`, `  "website": "${form.website}",`, '}', '', '# generated: 2024-11-12 | python 3.11']
       lines.forEach((line, i) => { ctx.fillStyle = i === lines.length-1 ? '#22aa55' : '#d6ffdd'; ctx.fillText(line, (pos.x+20)*sx, (pos.y + 90 + i*pos.gap)*sy) })
