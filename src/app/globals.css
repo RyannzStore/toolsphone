@@ -1054,25 +1054,3 @@ html[data-motion='reduced'] .nb-marquee-track {
   animation: none !important;
 }
 
-/* FIX RESPONSIF HP */
-* {
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-}
-@media (max-width: 768px) {
-  .nb-marquee-track { animation-duration: 30s !important; }
-  .nb-card, .tool-card, .panel {
-    box-shadow: 3px 3px 0 #111 !important;
-  }
-  .nb-navlink, .btn, button {
-    transition-duration: 0.05s !important;
-  }
-}
-
-/* FIX 2 - MATIIN SEMUA ANIMASI BERAT DI HP */
-@media (max-width: 768px) {
-    * { animation: none !important; transition: none !important; }
-  .nb-marquee-track, .animate-spin, .vinyl { animation: none !important; }
-    * { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
-    * { box-shadow: 2px 2px 0 #111 !important; }
-}
