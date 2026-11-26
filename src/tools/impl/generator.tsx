@@ -620,7 +620,7 @@ function UniversalConverter() {
 // --- About Me ---
 function AboutMe() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const [form, setForm] = useState({ nama: 'Rannz', umur: '17', pekerjaan: 'Pelajar', lokasi: 'Banten, Indonesia', status: 'aktif', email: 'ranggagntng170@gmail.com', website: 'toolora.web.id' })
+  const [form, setForm] = useState({ nama: 'Budi Santoso', umur: '20', pekerjaan: 'Software Engineer', lokasi: 'Jakarta, Indonesia', status: 'aktif', email: 'budi@example.com', website: 'example.com' })
   const [pos, setPos] = useState({ x: 520, y: 380, size: 34, gap: 50 })
   const draw = useCallback(() => {
     const c = canvasRef.current; if (!c) return
