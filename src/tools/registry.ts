@@ -165,6 +165,7 @@ export const TOOLS: ToolMeta[] = [
   t('generator', 'lorem-ipsum', 'Lorem Ipsum', 'Teks placeholder paragraf/kalimat/kata', 'AlignLeft', { keywords: ['placeholder', 'dummy'] }),
   t('generator', 'qr-contact', 'QR Contact', 'QR kontak (vCard) siap di-scan', 'Contact', { premium: true, keywords: ['vcard', 'kontak'] }),
   t('generator', 'barcode', 'Barcode', 'Code128, EAN, UPC, Code39, ITF', 'Barcode', { premium: true, keywords: ['ean', 'upc'] }),
+  t('generator', 'about-me', 'About Me', 'Bikin kartu data diri terminal, isi & download', 'User', { keywords: ['about me', 'data diri'] }),
   t('generator', 'meme-generator', 'Meme Generator', 'Tambah teks atas/bawah ke gambar', 'Smile', { premium: true, keywords: ['meme'] }),
   t('generator', 'universal-converter', 'Universal Converter', 'Konversi 10+ jenis satuan', 'Repeat', { premium: true, keywords: ['satuan', 'unit'] }),
 ];

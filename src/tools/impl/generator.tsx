@@ -616,7 +616,47 @@ function UniversalConverter() {
   );
 }
 
+
+// --- About Me ---
+function AboutMe() {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [form, setForm] = useState({ nama: 'Rannz', umur: '17', pekerjaan: 'Pelajar', lokasi: 'Banten, Indonesia', status: 'aktif', email: 'ranggagntng170@gmail.com', website: 'toolora.web.id' })
+  const [pos, setPos] = useState({ x: 290, y: 340, size: 52, gap: 72 })
+  const draw = useCallback(() => {
+    const c = canvasRef.current; if (!c) return
+    const ctx = c.getContext('2d'); if (!ctx) return
+    const img = new Image(); img.src = '/kartu-mentahan.jpg'
+    img.onload = () => {
+      c.width = img.width; c.height = img.height
+      ctx.drawImage(img, 0, 0)
+      const sx = c.width / 1600; const sy = c.height / 1200
+      ctx.font = `bold ${pos.size * sx}px monospace`
+      ctx.fillStyle = '#d6ffdd'; ctx.fillText('termux ', pos.x*sx, pos.y*sy)
+      ctx.fillStyle = '#22ff66'; ctx.fillText('$', (pos.x+170)*sx, pos.y*sy)
+      ctx.fillStyle = '#d6ffdd'; ctx.fillText(' ~ /data/diri', (pos.x+210)*sx, pos.y*sy)
+      ctx.font = `${pos.size * sx}px monospace`
+      const lines = ['', 'data_diri = {', `  "nama": "${form.nama}",`, `  "umur": ${form.umur},`, `  "pekerjaan": "${form.pekerjaan}",`, `  "lokasi": "${form.lokasi}",`, `  "status": "${form.status}",`, `  "email": "${form.email}",`, `  "website": "${form.website}",`, '}', '', '# generated: 2024-11-12 | python 3.11']
+      lines.forEach((line, i) => { ctx.fillStyle = i === lines.length-1 ? '#22aa55' : '#d6ffdd'; ctx.fillText(line, (pos.x+20)*sx, (pos.y + 90 + i*pos.gap)*sy) })
+    }
+  }, [form, pos])
+  useEffect(()=>{ draw() }, [draw])
+  const download = () => { draw(); setTimeout(()=>{ const c=canvasRef.current; if(!c) return; const a=document.createElement('a'); a.download=`about-me-${form.nama}.jpg`; a.href=c.toDataURL('image/jpeg',0.95); a.click() },300) }
+  const set = (k: string, v: string) => setForm(prev=>({...prev,[k]:v}))
+  return (
+    <div className="space-y-4">
+      <Card><div className="grid grid-cols-2 gap-3">
+        {Object.keys(form).map(k=>(<TextField key={k} label={k} value={(form as Record<string, string>)[k]} onChange={(v)=>set(k,v)} />))}
+      </div></Card>
+      <Card><canvas ref={canvasRef} className="w-full rounded-2xl border" />
+      <Row><NumField label="X" value={String(pos.x)} onChange={(v)=>setPos(prev=>({...prev,x:Number(v)||0}))} /><NumField label="Y" value={String(pos.y)} onChange={(v)=>setPos(prev=>({...prev,y:Number(v)||0}))} /><NumField label="Font" value={String(pos.size)} onChange={(v)=>setPos(prev=>({...prev,size:Number(v)||52}))} /></Row>
+      <Actions><button type="button" className="btn btn-primary" onClick={download}>Download Hasil</button></Actions>
+      <Notice>Kalo teks geser, ubah X / Y / Font sampe pas di kartu.</Notice></Card>
+    </div>
+  )
+}
+
 const tools: Record<string, ComponentType> = {
+
   'random-number': RandomNumber,
   'random-name-picker': NamePicker,
   'color-picker': ColorPicker,
@@ -625,6 +665,7 @@ const tools: Record<string, ComponentType> = {
   'lorem-ipsum': LoremIpsum,
   'qr-contact': QrContact,
   'barcode': Barcode,
+  'about-me': AboutMe,
   'meme-generator': MemeGenerator,
   'universal-converter': UniversalConverter,
 };
