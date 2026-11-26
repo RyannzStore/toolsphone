@@ -1053,3 +1053,18 @@ html[data-motion='reduced'] *::after {
 html[data-motion='reduced'] .nb-marquee-track {
   animation: none !important;
 }
+
+/* FIX RESPONSIF HP */
+* {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+@media (max-width: 768px) {
+  .nb-marquee-track { animation-duration: 30s !important; }
+  .nb-card, .tool-card, .panel {
+    box-shadow: 3px 3px 0 #111 !important;
+  }
+  .nb-navlink, .btn, button {
+    transition-duration: 0.05s !important;
+  }
+}
